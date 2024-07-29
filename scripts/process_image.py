@@ -6,9 +6,9 @@ from deepface import DeepFace
 from PIL import Image
 from io import BytesIO
 import base64
+import os
 # import json
 # import uuid
-import os
 
 def calculate_rgb_color(index):
     degree = 180.0 * (index % 2) + 90.0 * ((index // 2) % 2) + 45.0 * ((index // 4) % 2) + 22.5 * ((index // 8) % 2)
@@ -74,6 +74,7 @@ def get_mask_and_analysis(original_image, yolo_segmentation):
     sorted_indices = boxes[:, 0].argsort()
     deepface_analysis_results = []
 
+    people_segment_counter = 0
     # Apply each mask
     for i, index in enumerate(sorted_indices):
         if yolo_segmentation.boxes[index].cls.item() != 0:
@@ -93,8 +94,8 @@ def get_mask_and_analysis(original_image, yolo_segmentation):
 
         # Create a color layer based on the mask
         color_layer = np.zeros(image.shape, dtype=np.uint8)
-        # color_layer[:, :] = convert_rgb_to_bgr(calculate_rgb_color(i))
-        color_layer[:, :] = calculate_rgb_color(i)
+        region_color = calculate_rgb_color(people_segment_counter)
+        color_layer[:, :] = convert_rgb_to_bgr(region_color)
 
         # Apply the color layer where the mask is
         image[mask_bool] = color_layer[mask_bool]
@@ -116,13 +117,18 @@ def get_mask_and_analysis(original_image, yolo_segmentation):
         # Convert the cropped image into np.ndarray
         cropped_image = np.array(cropped_image)
 
-        # Display the cropped image
+        # # Display the cropped image
         # cv2.imshow('Cropped Image1' + str(index), image)
         # cv2.imshow('Cropped Image2' + str(index), cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
         # cv2.waitKey(0)
 
-        deepface_analysis_results.append(deepface_analyze(cropped_image))
+        # pil_image = Image.fromarray(image)
+        # pil_image.save('test_kamo.png')
+        # pil_image2 = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+        # pil_image2.save('test_kamo2.png')
 
+        deepface_analysis_results.append(deepface_analyze(cropped_image))
+        people_segment_counter = people_segment_counter + 1
     return cv2.cvtColor(image, cv2.COLOR_RGB2BGR), deepface_analysis_results
 
 
