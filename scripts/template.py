@@ -25,6 +25,7 @@ class ExtensionTemplateScript(base_scripts.Script):
                     label="Original image",
                     tool="editor",
                     source="upload",
+                    height=400
                 )
                 self.prompt_template = gr.Textbox(label="Regional prompt template",
                                                   value=prompt_generator.get_default_prompt_template())
@@ -38,6 +39,7 @@ class ExtensionTemplateScript(base_scripts.Script):
                     label="Generated mask image",
                     tool="editor",
                     source="upload",
+                    height=400
                 )
             self.send_text_button.click(fn=self.compute, inputs=[self.prompt_template, self.original_image],
                                         outputs=[self.generated_prompt, self.generated_mask_image])
