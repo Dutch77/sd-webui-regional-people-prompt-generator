@@ -13,7 +13,7 @@ if not launch.is_installed("numpy"):
 if not launch.is_installed("torch"):
     launch.run_pip("install torch")
 if not launch.is_installed("tf-keras"):
-    launch.run_pip("install tf-keras<=2.15.1")
+    launch.run_pip("install 'tf-keras<=2.15.1'")
 if not launch.is_installed("deepface"):
     launch.run_pip("install deepface")
 if not launch.is_installed("pillow"):
