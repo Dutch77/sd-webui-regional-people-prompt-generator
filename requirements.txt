@@ -1,0 +1,9 @@
+jinja2
+tf-keras<=2.15.1
+ultralytics
+opencv-python
+numpy
+torch
+deepface
+pillow
+fastapi
