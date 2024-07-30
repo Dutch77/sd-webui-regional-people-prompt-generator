@@ -19,7 +19,7 @@ class ExtensionTemplateScript(base_scripts.Script):
         return base_scripts.AlwaysVisible
 
     def ui(self, is_img2img):
-        with gr.Accordion('Regional people prompt generator', open=True):
+        with gr.Accordion('Regional people prompt generator', open=False):
             with gr.Row():
                 self.original_image = gr.Image(
                     label="Original image",
