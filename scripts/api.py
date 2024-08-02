@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from modules import scripts, shared
 from modules.api import api
 import gradio as gr
-import scripts.process_image as process_image
+from scripts.mask_and_analysis_generator import MaskAndAnalysisGenerator
 import scripts.prompt_generator as prompt_generator
 from PIL import Image
 
@@ -16,7 +16,8 @@ def human_regional_prompter_api(_: gr.Blocks, app: FastAPI):
             image: str = Body("", title="Image"),
             prompt_template: str = Body(prompt_generator.get_default_prompt_template(), title="Prompt template")
     ):
-        mask_image, analysis = process_image.process(image)
+        generator = MaskAndAnalysisGenerator()
+        mask_image, analysis = generator.process(image)
         rendered_prompt = prompt_generator.generate_prompt(prompt_template, analysis)
 
         return {"mask_image": api.encode_pil_to_base64(Image.fromarray(mask_image)), "rendered_prompt": rendered_prompt}

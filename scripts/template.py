@@ -1,7 +1,7 @@
 import modules.scripts as base_scripts
 import gradio as gr
 from modules.processing import process_images, Processed
-import scripts.process_image as process_image
+from scripts.mask_and_analysis_generator import MaskAndAnalysisGenerator
 import scripts.prompt_generator as prompt_generator
 
 
@@ -47,7 +47,8 @@ class ExtensionTemplateScript(base_scripts.Script):
         return [self.original_image, self.prompt_template]
 
     def compute(self, prompt_template_value, original_image_value):
-        mask, analysis = process_image.process(original_image_value)
+        generator = MaskAndAnalysisGenerator()
+        mask, analysis = generator.process(original_image_value)
         rendered_prompt = prompt_generator.generate_prompt(prompt_template_value, analysis)
 
         return rendered_prompt, mask

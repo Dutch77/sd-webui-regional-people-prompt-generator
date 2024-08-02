@@ -29,4 +29,4 @@ def generate_prompt(prompt_template, analysis):
         rendered_strings.append(rendered_string)
     print(rendered_strings)
 
-    return " BREAK\n".join(rendered_strings)
+    return " BREAK\n" + " BREAK\n".join(rendered_strings)
