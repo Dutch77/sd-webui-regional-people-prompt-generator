@@ -56,7 +56,7 @@ class MaskAndAnalysisGenerator:
         deepface_dir = os.getenv('DEEPFACE_HOME', '')
         mivolo_dir = os.getenv('MIVOLO_HOME', '')
         config_dict = {
-            'detector_weights': os.path.join(deepface_dir, ".deepface/weightsyolov8n-face.pt"),
+            'detector_weights': os.path.join(deepface_dir, ".deepface/weights/yolov8n-face.pt"),
             'checkpoint': os.path.join(mivolo_dir, "model_utk_age_gender_4.23_97.69.pth.tar"),
             'device': 'cpu',
             'with_persons': True,
@@ -182,7 +182,7 @@ class MaskAndAnalysisGenerator:
 
     def get_yolo_segmentation(self, image):
         ultralytics_dir = os.getenv('ULTRALYTICS_HOME', '')
-        model = YOLO(model=os.path.join(ultralytics_dir, "yolov8x-person_face.pt"))
+        model = YOLO(model=os.path.join(ultralytics_dir, "yolov8n-face.pt"))
         results = model([image])
         # results[0].show()
         return results[0]
