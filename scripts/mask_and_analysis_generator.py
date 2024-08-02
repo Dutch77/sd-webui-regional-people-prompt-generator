@@ -182,7 +182,7 @@ class MaskAndAnalysisGenerator:
 
     def get_yolo_segmentation(self, image):
         ultralytics_dir = os.getenv('ULTRALYTICS_HOME', '')
-        model = YOLO(model=os.path.join(ultralytics_dir, "yolov8n-face.pt"))
+        model = YOLO(model=os.path.join(ultralytics_dir, "yolov8x-seg.pt"))
         results = model([image])
         # results[0].show()
         return results[0]
