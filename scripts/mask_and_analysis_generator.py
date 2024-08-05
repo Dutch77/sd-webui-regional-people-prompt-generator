@@ -53,10 +53,9 @@ class MaskAndAnalysisGenerator:
         self.predictor: Predictor | None = None
 
     def init_mivolo(self, ):
-        deepface_dir = os.getenv('DEEPFACE_HOME', '')
         mivolo_dir = os.getenv('MIVOLO_HOME', '')
         config_dict = {
-            'detector_weights': os.path.join(deepface_dir, ".deepface/weights/yolov8n-face.pt"),
+            'detector_weights': os.path.join(mivolo_dir, "yolov8x_person_face.pt"),
             'checkpoint': os.path.join(mivolo_dir, "model_utk_age_gender_4.23_97.69.pth.tar"),
             'device': 'cpu',
             'with_persons': True,
