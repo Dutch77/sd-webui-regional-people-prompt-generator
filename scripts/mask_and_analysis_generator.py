@@ -87,7 +87,8 @@ class MaskAndAnalysisGenerator:
             age = int(result.ages[-1]) if result.ages[-1] is not None else ''
             gender = result.genders[-1] if result.genders[-1] is not None else ''
 
-            print(f"Age: {age}, Gender: {gender}")
+            print(f"Age: {age}")
+            print(f"Gender: {gender}")
 
             analysis = DeepFace.analyze(
                 img_path=np_ndarray,
