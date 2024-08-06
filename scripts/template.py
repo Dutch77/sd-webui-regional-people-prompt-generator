@@ -1,8 +1,9 @@
 import modules.scripts as base_scripts
 import gradio as gr
 from modules.processing import process_images, Processed
-from scripts.mask_and_analysis_generator import MaskAndAnalysisGenerator
+from scripts.mask_and_analysis_generator import MaskAndAnalysisGenerator, load_image
 import scripts.prompt_generator as prompt_generator
+from modules import codeformer_model
 
 
 class ExtensionTemplateScript(base_scripts.Script):
@@ -32,6 +33,11 @@ class ExtensionTemplateScript(base_scripts.Script):
             with gr.Row():
                 self.send_text_button = gr.Button(value="Generate mask and regional prompt", variant='primary')
             with gr.Row():
+                self.enhance_photo = gr.Checkbox(
+                    label="Enhance photo",
+                    value=True
+            )
+            with gr.Row():
                 self.generated_prompt = gr.Textbox(label="Generated regional prompt", interactive=False, lines=15,
                                                    show_copy_button=True)
             with gr.Row():
@@ -41,14 +47,19 @@ class ExtensionTemplateScript(base_scripts.Script):
                     source="upload",
                     height=400
                 )
-            self.send_text_button.click(fn=self.compute, inputs=[self.prompt_template, self.original_image],
+            self.send_text_button.click(fn=self.compute, inputs=[self.prompt_template, self.original_image, self.enhance_photo],
                                         outputs=[self.generated_prompt, self.generated_mask_image])
 
         return [self.original_image, self.prompt_template]
 
-    def compute(self, prompt_template_value, original_image_value):
+    def compute(self, prompt_template_value, original_image_value, enhance_photo_value):
+        if enhance_photo_value:
+            print('Enhancing photo')
+            image = load_image(original_image_value)
+            image = codeformer_model.codeformer.restore(image, w=1)
+
         generator = MaskAndAnalysisGenerator()
-        mask, analysis = generator.process(original_image_value)
+        mask, analysis = generator.process(image)
         rendered_prompt = prompt_generator.generate_prompt(prompt_template_value, analysis)
 
         return rendered_prompt, mask
