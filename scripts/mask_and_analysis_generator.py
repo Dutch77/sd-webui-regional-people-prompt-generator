@@ -49,14 +49,18 @@ def load_image(image_or_path):
 
 class MaskAndAnalysisGenerator:
 
-    def __init__(self):
+    def __init__(self, mivolo_model="model_imdb_cross_person_4.22_99.46.pth.tar",
+                 mivolo_yolo_model="yolov8x_person_face.pt", yolo_seg_model="yolov8x-seg.pt"):
         self.predictor: Predictor | None = None
+        self.mivolo_model = mivolo_model
+        self.mivolo_yolo_model = mivolo_yolo_model
+        self.yolo_seg_model = yolo_seg_model
 
-    def init_mivolo(self, ):
+    def init_mivolo(self):
         mivolo_dir = os.getenv('MIVOLO_HOME', '')
         config_dict = {
-            'detector_weights': os.path.join(mivolo_dir, "yolov8x_person_face.pt"),
-            'checkpoint': os.path.join(mivolo_dir, "model_utk_age_gender_4.23_97.69.pth.tar"),
+            'detector_weights': os.path.join(mivolo_dir, self.mivolo_yolo_model),
+            'checkpoint': os.path.join(mivolo_dir, self.mivolo_model),
             'device': 'cpu',
             'with_persons': True,
             'disable_faces': False,
@@ -186,7 +190,7 @@ class MaskAndAnalysisGenerator:
 
     def get_yolo_segmentation(self, image):
         ultralytics_dir = os.getenv('ULTRALYTICS_HOME', '')
-        model = YOLO(model=os.path.join(ultralytics_dir, "yolov8x-seg.pt"))
+        model = YOLO(model=os.path.join(ultralytics_dir, self.yolo_seg_model))
         results = model([image])
         # results[0].show()
         return results[0]
@@ -197,6 +201,5 @@ class MaskAndAnalysisGenerator:
         yolo_segmentation = self.get_yolo_segmentation(image)
         return self.get_mask_and_analysis(image, yolo_segmentation)
 
-
 # process_image = MaskAndAnalysisGenerator()
-# print(process_image.process('img2.jpg'))
+# print(process_image.process('img14.jpeg'))
