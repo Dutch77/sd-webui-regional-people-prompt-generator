@@ -52,15 +52,15 @@ class ExtensionTemplateScript(base_scripts.Script):
 
         return [self.original_image, self.prompt_template]
 
-    def compute(self, prompt_template_value, original_image_value, enhance_photo_value):
-        if enhance_photo_value:
+    def compute(self, prompt_template, image, enhance_photo):
+        if enhance_photo:
             print('Enhancing photo')
-            image = load_image(original_image_value)
+            image = load_image(image)
             image = codeformer_model.codeformer.restore(image, w=1)
 
         generator = MaskAndAnalysisGenerator()
         mask, analysis = generator.process(image)
-        rendered_prompt = prompt_generator.generate_prompt(prompt_template_value, analysis)
+        rendered_prompt = prompt_generator.generate_prompt(prompt_template, analysis)
 
         return rendered_prompt, mask
 

@@ -35,8 +35,8 @@ def load_image(image_or_path):
                     image_or_path = image_or_path.split(";", maxsplit=1)[1].split(",", maxsplit=1)[1]
                 image = Image.open(BytesIO(base64.b64decode(image_or_path)))
             except Exception as base64Exception:
-                print(f"Failed to load image from path with error: {openException}")
-                print(f"Failed to decode image from base64 string error: {base64Exception}")
+                # print(f"Failed to load image from path with error: {openException}")
+                # print(f"Failed to decode image from base64 string error: {base64Exception}")
                 raise Exception("Image path is invalid or base64 string is invalid.")
         image = np.array(image.convert('RGB'))
     elif isinstance(image_or_path, np.ndarray):
